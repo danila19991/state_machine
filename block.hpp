@@ -1,24 +1,23 @@
 //
 // Created by gusef on 25.10.2018.
 //
-
-#ifndef STATEMACHINE_BLOCK_HPP
-#define STATEMACHINE_BLOCK_HPP
+#pragma once
 
 #include <array>
-#include <vector>
 #include <string>
+#include <vector>
 #include <unordered_map>
 
-#include "Vertex.h"
+#include "vertex.hpp"
+
 
 /**
- * \brief                       Class for creating configuration for state machine.
- * \tparam _alphabet_size       Size of alphabit in state machine.
- * \tparam _character_caster    Function for casting symbol to size_t.
+ * \brief                    Class for creating configuration for state machine.
+ * \tparam _alphabet_size    Size of alphabit in state machine.
+ * \tparam _character_caster Function for casting symbol to size_t.
  */
-template<size_t _alphabet_size, size_t (*_character_caster)(char)>
-class Block
+template <size_t _alphabet_size, size_t (* _character_caster)(char)>
+class block
 {
     /**
      * \brief First base for hashing.
@@ -71,8 +70,8 @@ class Block
 
     /**
      * \brief               Deep first search for finding equal sub trees.
-     * @param[in] position  Current position of dfs.
-     * @return              Hash of current sub tree.
+     * \param[in] position  Current position of dfs.
+     * \return              Hash of current sub tree.
      */
     unsigned long long optimise_links_crowler(size_t position);
 
@@ -90,12 +89,12 @@ class Block
      * \brief           Function for concatenating 2 blocks.
      * \param[in] block New block for concatenating.
      */
-    void concatinate_impl(const Block& block);
+    void concatenate_impl(const block& block);
 
     /**
-     * \brief Function for concatinate many blocks.
+     * \brief Function for concatenate many blocks.
      */
-    void concatinate();
+    void concatenate();
 
     /***
      * \brief Function for adding many strings.
@@ -114,7 +113,7 @@ class Block
      * \param[in] line      New string for adding.
      * \param[in] Args      Other strings for adding.
      */
-    template<typename ...args>
+    template <typename ...args>
     void add_string(const std::string& line, args ...Args);
 
 public:
@@ -123,24 +122,24 @@ public:
      * \brief               Constructor from vector of strings.
      * \param[in] lines     Vector of accepting strings.
      */
-    explicit Block(const std::vector<std::string>& lines);
+    explicit block(const std::vector<std::string>& lines);
 
     /**
      * \brief           Constructor from array of strings.
      * \tparam n        Number of strings in array.
      * \param[in] lines Strings for adding.
      */
-    template<size_t n>
-    explicit Block(const std::array<std::string, n>& lines);
+    template <size_t n>
+    explicit block(const std::array<std::string, n>& lines);
 
     /**
-     * \brief               Constructor from many strings.
-     * \tparam args         Other strings in stack.
-     * \param[in] line1     First string in accepting lines.
-     * \param[in] Args      Other strings.
+     * \brief           Constructor from many strings.
+     * \tparam args     Other strings in stack.
+     * \param[in] line1 First string in accepting lines.
+     * \param[in] Args  Other strings.
      */
-    template<typename ...args>
-    explicit Block(const std::string& line1, args ...Args);
+    template <typename ...args>
+    explicit block(const std::string& line1, args ...Args);
 
     /**
      * \brief           Copy constructor from many blocks.
@@ -148,8 +147,8 @@ public:
      * \param[in] other First block for constructing.
      * \param[in] Args  Other blocks.
      */
-    template<typename ...args>
-    explicit Block(const Block<_alphabet_size, _character_caster>& other, args ...Args);
+    template <typename ...args>
+    explicit block(const block& other, args ...Args);
 
     /**
      * \brief           Move constructor from many blocks.
@@ -157,41 +156,41 @@ public:
      * \param[in] other First block for constructing.
      * \param[in] Args  Other blocks.
      */
-    template<typename ...args>
-    explicit Block(Block<_alphabet_size, _character_caster>&& other, args ...Args) noexcept;
+    template <typename ...args>
+    explicit block(block&& other, args ...Args) noexcept;
 
     /**
      * \brief               Constructor from vector of blocks.
      * \param[in] blocks    Vector of blocks, which should be concatinate.
      */
-    explicit Block(const std::vector<Block<_alphabet_size, _character_caster>>& blocks);
+    explicit block(const std::vector<block>& blocks);
 
     /**
-     * \brief               Constructor from array of blocks.
-     * @tparam n            Size of array.
-     * \param[in] blocks    Array of blocks, which should be concatinate.
+     * \brief            Constructor from array of blocks.
+     * \tparam n         Size of array.
+     * \param[in] blocks Array of blocks, which should be concatinate.
      */
-    template<size_t n>
-    explicit Block(const std::array<Block<_alphabet_size, _character_caster>, n>& blocks);
+    template <size_t n>
+    explicit block(const std::array<block, n>& blocks);
 
     /**
      * \brief           Copy constructor for making closure of block.
      * \param[in] other Block from which should be constructed.
      * \param[in] type  Type of closure.
      */
-    Block(const Block& other, char type);
+    block(const block& other, char type);
 
     /**
      * \brief           Move constructor for making closure of block.
      * \param[in] other Block from which should be constructed.
      * \param[in] type  Type of closure.
      */
-    Block(Block&& other, char type) noexcept;
+    block(block&& other, char type) noexcept;
 
     /**
      * \brief Function for printing structure of state machine.
      */
-    void print();
+    void print() const;
 
     /**
      * \brief           Function for concatinate many blocks to this.
@@ -199,8 +198,8 @@ public:
      * \param[in] other First block for concatinate.
      * \param[in] Args  Other blocks.
      */
-    template<typename ...args>
-    void concatinate(const Block<_alphabet_size, _character_caster>& other, args ...Args);
+    template <typename ...args>
+    void concatenate(const block& other, args ...Args);
 
     /**
      * \brief   Function for getting vertexes of state machine.
@@ -212,13 +211,13 @@ public:
      * \brief   Function for getting root of state machine.
      * \return  Id of root.
      */
-    size_t get_root() const;
+    size_t get_root() const noexcept;
 
     /**
      * \brief   Function for getting size of state machine.
      * \return  Number of vertexes in state machine.
      */
-    size_t size() const;
+    size_t size() const noexcept;
 
     /**
      * \brief           Function for setting closure to these block.
@@ -230,6 +229,4 @@ public:
     void add_closure(char type);
 };
 
-#include "Block.hpp"
-
-#endif //STATEMACHINE_BLOCK_HPP
+#include "block.inl"

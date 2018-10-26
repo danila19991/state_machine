@@ -3,4 +3,4 @@ project(StateMachine)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(${PROJECT_NAME} main.cpp Vertex.hpp Vertex.h Block.hpp Block.h StateMachine.hpp StateMachine.h)
+add_executable(${PROJECT_NAME} main.cpp vertex.inl vertex.hpp block.inl block.hpp state_machine.inl state_machine.hpp)
