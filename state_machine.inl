@@ -42,7 +42,8 @@ std::vector<size_t> state_machine<_alphabet_size, _character_caster>::find_end_p
                 result.emplace_back(symbol_number - 1);
             }
             const size_t next_vertex = _block.get_vertexes().at(state).get_next(
-                _character_caster(line[symbol_number]));
+                _character_caster(line[symbol_number])
+            );
             closure(next_vertex, next_states);
         }
         if (info)
