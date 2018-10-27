@@ -34,7 +34,7 @@ size_t symbol_caster(char c)
 }
 
 typedef block<_alphabet_size, symbol_caster> re;
-typedef StateMachine<_alphabet_size, symbol_caster> sm;
+typedef state_machine<_alphabet_size, symbol_caster> sm;
 
 
 // current version - fast compilation, slow execution.

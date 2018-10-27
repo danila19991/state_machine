@@ -24,7 +24,7 @@ block<_alphabet_size, _character_caster>::block(const std::vector<std::string>& 
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
 size_t block<_alphabet_size, _character_caster>::new_vertex()
 {
-    _vertexes.emplace_back(Vertex<_alphabet_size>());
+    _vertexes.emplace_back(vertex<_alphabet_size>());
     return _vertexes.size() - 1;
 }
 
@@ -45,7 +45,7 @@ block<_alphabet_size, _character_caster>::block(const std::array<std::string, n>
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
 void block<_alphabet_size, _character_caster>::optimise_vertexes()
 {
-    std::vector<Vertex<_alphabet_size>> new_vertexes(1);
+    std::vector<vertex<_alphabet_size>> new_vertexes(1);
 
     std::deque<bool> was_in_vertex(_vertexes.size(), false);
     was_in_vertex.at(_root) = true;
@@ -59,16 +59,16 @@ void block<_alphabet_size, _character_caster>::optimise_vertexes()
     q_vertexes.push(_root);
     while (!q_vertexes.empty())
     {
-        size_t vertex = q_vertexes.front();
-        size_t new_vertex = vertexes_dict[vertex];
+        size_t vertex_front = q_vertexes.front();
+        size_t new_vertex = vertexes_dict[vertex_front];
         q_vertexes.pop();
 
-        auto current_vertexes = _vertexes.at(vertex);
+        auto current_vertexes = _vertexes.at(vertex_front);
         for (size_t i = 0; i < _alphabet_size; ++i)
         {
             if (!was_in_vertex.at(current_vertexes.get_next(i)))
             {
-                new_vertexes.emplace_back(Vertex<_alphabet_size>());
+                new_vertexes.emplace_back(vertex<_alphabet_size>());
                 vertexes_dict[current_vertexes.get_next(i)] = new_vertexes.size() - 1;
                 was_in_vertex.at(current_vertexes.get_next(i)) = true;
                 q_vertexes.push(current_vertexes.get_next(i));
@@ -81,7 +81,7 @@ void block<_alphabet_size, _character_caster>::optimise_vertexes()
         {
             if (!was_in_vertex.at(eps_links.at(link_number)))
             {
-                new_vertexes.emplace_back(Vertex<_alphabet_size>());
+                new_vertexes.emplace_back(vertex<_alphabet_size>());
                 vertexes_dict[eps_links.at(link_number)] = new_vertexes.size() - 1;
                 was_in_vertex.at(eps_links.at(link_number)) = true;
                 q_vertexes.push(eps_links.at(link_number));
@@ -208,7 +208,7 @@ void block<_alphabet_size, _character_caster>::print() const
 }
 
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
-std::vector<Vertex<_alphabet_size>>
+std::vector<vertex<_alphabet_size>>
 block<_alphabet_size, _character_caster>::get_vertexes() const
 {
     return _vertexes;

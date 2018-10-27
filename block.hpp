@@ -32,7 +32,7 @@ class block
     /**
      * \brief Container for vertexes in state machine.
      */
-    std::vector<Vertex<_alphabet_size>> _vertexes;
+    std::vector<vertex<_alphabet_size>> _vertexes;
 
     /**
      * \brief Start position of state machine.
@@ -205,7 +205,7 @@ public:
      * \brief   Function for getting vertexes of state machine.
      * \return  Vector of vertexes.
      */
-    std::vector<Vertex<_alphabet_size>> get_vertexes() const;
+    std::vector<vertex<_alphabet_size>> get_vertexes() const;
 
     /**
      * \brief   Function for getting root of state machine.

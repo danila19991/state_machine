@@ -1,2 +1,3 @@
-# StateMachine
-State machine realisation on c++.
+# state_machine
+
+State machine implementation on C++.

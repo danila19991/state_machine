@@ -16,7 +16,7 @@
  * \tparam _character_caster    Function for comparing number to string symbol.
  */
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
-class StateMachine
+class state_machine
 {
 
     /**
@@ -47,7 +47,7 @@ public:
      * \brief             Constructor from configured block.
      * \param[in] block   Configured state machine with vertexes and links.
      */
-    explicit StateMachine(block<_alphabet_size, _character_caster>& block);
+    explicit state_machine(block<_alphabet_size, _character_caster>& block);
 
     /***
      * \brief             Function for finding all end positions of correct sub strings.

@@ -3,7 +3,7 @@
 //
 
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
-StateMachine<_alphabet_size, _character_caster>::StateMachine(
+state_machine<_alphabet_size, _character_caster>::state_machine(
     block<_alphabet_size, _character_caster>& block)
 : _block(block)
 , _current_states(0)
@@ -11,7 +11,7 @@ StateMachine<_alphabet_size, _character_caster>::StateMachine(
 }
 
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
-std::vector<size_t> StateMachine<_alphabet_size, _character_caster>::find_end_positions(
+std::vector<size_t> state_machine<_alphabet_size, _character_caster>::find_end_positions(
     const std::string& line, bool info)
 {
     if (line.empty())
@@ -31,17 +31,17 @@ std::vector<size_t> StateMachine<_alphabet_size, _character_caster>::find_end_po
         size_t next_states = _current_states ^1;
         _active_states.at(next_states).clear();
         closure(_block.get_root(), next_states);
-        for (auto& vertex : _active_states.at(_current_states))
+        for (auto& state : _active_states.at(_current_states))
         {
             if (info)
             {
-                std::cout << vertex << ' ';
+                std::cout << state << ' ';
             }
-            if (_block.get_vertexes().at(vertex)._is_finished)
+            if (_block.get_vertexes().at(state)._is_finished)
             {
                 result.emplace_back(symbol_number - 1);
             }
-            size_t next_vertex = _block.get_vertexes().at(vertex).get_next(
+            size_t next_vertex = _block.get_vertexes().at(state).get_next(
                 _character_caster(line[symbol_number]));
             closure(next_vertex, next_states);
         }
@@ -51,9 +51,9 @@ std::vector<size_t> StateMachine<_alphabet_size, _character_caster>::find_end_po
         }
         _current_states = next_states;
     }
-    for (auto& vertex : _active_states.at(_current_states))
+    for (auto& state : _active_states.at(_current_states))
     {
-        if (_block.get_vertexes().at(vertex)._is_finished)
+        if (_block.get_vertexes().at(state)._is_finished)
         {
             result.emplace_back(line.size() - 1);
         }
@@ -62,7 +62,7 @@ std::vector<size_t> StateMachine<_alphabet_size, _character_caster>::find_end_po
 }
 
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
-void StateMachine<_alphabet_size, _character_caster>::closure(size_t position, size_t state_buffer)
+void state_machine<_alphabet_size, _character_caster>::closure(size_t position, size_t state_buffer)
 {
     if (!_active_states.at(state_buffer).count(position))
     {

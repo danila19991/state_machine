@@ -12,7 +12,7 @@
  * \tparam[in] _alphabet_size Size of alphabet for state machine.
  */
 template <size_t _alphabet_size>
-class Vertex
+class vertex
 {
 
     /**
@@ -32,7 +32,7 @@ public:
     /**
      * \breif Default constructor.
      */
-    Vertex();
+    vertex();
 
     /**
      * \brief                 Setter for vertex link.
