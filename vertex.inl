@@ -11,19 +11,19 @@ vertex<_alphabet_size>::vertex()
 }
 
 template <size_t _alphabet_size>
-constexpr void vertex<_alphabet_size>::set_link(size_t position, size_t destination)
+constexpr void vertex<_alphabet_size>::set_link(const size_t position, const size_t destination)
 {
     _links.at(position) = destination;
 }
 
 template <size_t _alphabet_size>
-constexpr size_t vertex<_alphabet_size>::get_next(size_t position) const
+constexpr size_t vertex<_alphabet_size>::get_next(const size_t position) const
 {
     return _links.at(position);
 }
 
 template <size_t _alphabet_size>
-void vertex<_alphabet_size>::add_eps_link(size_t destination)
+void vertex<_alphabet_size>::add_eps_link(const size_t destination)
 {
     _eps_links.emplace_back(destination);
 }

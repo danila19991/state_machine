@@ -3,17 +3,17 @@
 //
 #pragma once
 
-#include <vector>
 #include <string>
 #include <unordered_set>
+#include <vector>
 
 #include "block.hpp"
 
 
 /**
- * \brief                       Class for executing state machine configured in block.
- * \tparam _alphabet_size       Size of state machine alphabit.
- * \tparam _character_caster    Function for comparing number to string symbol.
+ * \brief                    Class for executing state machine configured in block.
+ * \tparam _alphabet_size    Size of state machine alphabit.
+ * \tparam _character_caster Function for comparing number to string symbol.
  */
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
 class state_machine
@@ -35,25 +35,25 @@ class state_machine
     size_t _current_states;
 
     /**
-     * \brief                     Function for getting closure by eps links from some state.
-     * \param[in] position        Current position which closure we need to get.
-     * \param[in] state_buffer    Number of buffer in which we should add new states.
+     * \brief                  Function for getting closure by eps links from some state.
+     * \param[in] position     Current position which closure we need to get.
+     * \param[in] state_buffer Number of buffer in which we should add new states.
      */
-    void closure(size_t position, size_t state_buffer);
+    void closure(const size_t position, const size_t state_buffer);
 
 public:
 
     /**
-     * \brief             Constructor from configured block.
-     * \param[in] block   Configured state machine with vertexes and links.
+     * \brief           Constructor from configured block.
+     * \param[in] block Configured state machine with vertexes and links.
      */
     explicit state_machine(block<_alphabet_size, _character_caster>& block);
 
     /***
-     * \brief             Function for finding all end positions of correct sub strings.
-     * \param[in] line    Text for searching.
-     * \param[in] info    Flag if should show debug information.
-     * \return            Vector with ends of good substrings.
+     * \brief          Function for finding all end positions of correct sub strings.
+     * \param[in] line Text for searching.
+     * \param[in] info Flag if should show debug information.
+     * \return         Vector with ends of good substrings.
      */
     std::vector<size_t> find_end_positions(const std::string& line, bool info = false);
 

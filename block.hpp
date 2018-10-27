@@ -61,19 +61,19 @@ class block
     void optimise_vertexes();
 
     /**
-     * \brief               Function for checking if 2 vertexes has equal sub trees.
-     * \param[in] vertex1   First vertex for checking.
-     * \param[in] vertex2   Second vertex for checking.
-     * \return              True if sub trees from these vertexes equal, false otherwise.
+     * \brief             Function for checking if 2 vertexes has equal sub trees.
+     * \param[in] vertex1 First vertex for checking.
+     * \param[in] vertex2 Second vertex for checking.
+     * \return            True if sub trees from these vertexes equal, false otherwise.
      */
-    bool is_equal_sub_trees(size_t vertex1, size_t vertex2);
+    bool is_equal_sub_trees(const size_t vertex1, const size_t vertex2);
 
     /**
-     * \brief               Deep first search for finding equal sub trees.
-     * \param[in] position  Current position of dfs.
-     * \return              Hash of current sub tree.
+     * \brief              Deep first search for finding equal sub trees.
+     * \param[in] position Current position of dfs.
+     * \return             Hash of current sub tree.
      */
-    unsigned long long optimise_links_crowler(size_t position);
+    unsigned long long optimise_links_crawler(const size_t position);
 
     /**
      * \brief Function for optimising links in state machine.
@@ -102,25 +102,25 @@ class block
     void add_string();
 
     /**
-     * \brief           Function for adding string to accepted list of this block.
-     * \param[in] line  New string.
+     * \brief          Function for adding string to accepted list of this block.
+     * \param[in] line New string.
      */
     void add_string_impl(const std::string& line);
 
     /**
-     * \brief               Function for adding many strings.
-     * \tparam args         Other strings in stack.
-     * \param[in] line      New string for adding.
-     * \param[in] Args      Other strings for adding.
+     * \brief          Function for adding many strings.
+     * \tparam Args    Other strings in stack.
+     * \param[in] line New string for adding.
+     * \param[in] args Other strings for adding.
      */
-    template <typename ...args>
-    void add_string(const std::string& line, args ...Args);
+    template <typename... Args>
+    void add_string(const std::string& line, const Args&... args);
 
 public:
 
     /**
-     * \brief               Constructor from vector of strings.
-     * \param[in] lines     Vector of accepting strings.
+     * \brief           Constructor from vector of strings.
+     * \param[in] lines Vector of accepting strings.
      */
     explicit block(const std::vector<std::string>& lines);
 
@@ -134,34 +134,34 @@ public:
 
     /**
      * \brief           Constructor from many strings.
-     * \tparam args     Other strings in stack.
+     * \tparam Args     Other strings in stack.
      * \param[in] line1 First string in accepting lines.
-     * \param[in] Args  Other strings.
+     * \param[in] args  Other strings.
      */
-    template <typename ...args>
-    explicit block(const std::string& line1, args ...Args);
+    template <typename... Args>
+    explicit block(const std::string& line1, const Args&... args);
 
     /**
      * \brief           Copy constructor from many blocks.
-     * \tparam args     Other blocks in stack.
+     * \tparam Args     Other blocks in stack.
      * \param[in] other First block for constructing.
-     * \param[in] Args  Other blocks.
+     * \param[in] args  Other blocks.
      */
-    template <typename ...args>
-    explicit block(const block& other, args ...Args);
+    template <typename... Args>
+    explicit block(const block& other, const Args&... args);
 
     /**
      * \brief           Move constructor from many blocks.
-     * \tparam args     Other blocks in stack.
+     * \tparam Args     Other blocks in stack.
      * \param[in] other First block for constructing.
-     * \param[in] Args  Other blocks.
+     * \param[in] args  Other blocks.
      */
-    template <typename ...args>
-    explicit block(block&& other, args ...Args) noexcept;
+    template <typename... Args>
+    explicit block(block&& other, Args&&... args) noexcept;
 
     /**
-     * \brief               Constructor from vector of blocks.
-     * \param[in] blocks    Vector of blocks, which should be concatinate.
+     * \brief            Constructor from vector of blocks.
+     * \param[in] blocks Vector of blocks, which should be concatinate.
      */
     explicit block(const std::vector<block>& blocks);
 
@@ -178,14 +178,14 @@ public:
      * \param[in] other Block from which should be constructed.
      * \param[in] type  Type of closure.
      */
-    block(const block& other, char type);
+    block(const block& other, const char type);
 
     /**
      * \brief           Move constructor for making closure of block.
      * \param[in] other Block from which should be constructed.
      * \param[in] type  Type of closure.
      */
-    block(block&& other, char type) noexcept;
+    block(block&& other, const char type) noexcept;
 
     /**
      * \brief Function for printing structure of state machine.
@@ -193,40 +193,40 @@ public:
     void print() const;
 
     /**
-     * \brief           Function for concatinate many blocks to this.
-     * \tparam args     Other blocks for concatinate.
-     * \param[in] other First block for concatinate.
-     * \param[in] Args  Other blocks.
+     * \brief           Function for concatenate many blocks to this.
+     * \tparam Args     Other blocks for concatenate.
+     * \param[in] other First block for concatenate.
+     * \param[in] args  Other blocks.
      */
-    template <typename ...args>
-    void concatenate(const block& other, args ...Args);
+    template <typename... Args>
+    void concatenate(const block& other, const Args&... args);
 
     /**
-     * \brief   Function for getting vertexes of state machine.
-     * \return  Vector of vertexes.
+     * \brief  Function for getting vertexes of state machine.
+     * \return Vector of vertexes.
      */
     std::vector<vertex<_alphabet_size>> get_vertexes() const;
 
     /**
-     * \brief   Function for getting root of state machine.
-     * \return  Id of root.
+     * \brief  Function for getting root of state machine.
+     * \return Id of root.
      */
     size_t get_root() const noexcept;
 
     /**
-     * \brief   Function for getting size of state machine.
-     * \return  Number of vertexes in state machine.
+     * \brief  Function for getting size of state machine.
+     * \return Number of vertexes in state machine.
      */
     size_t size() const noexcept;
 
     /**
-     * \brief           Function for setting closure to these block.
-     * \details         '?' - for 1 or 0 repetitions;
-     *                  '*' - for 0 or inf repetitions.
-     *                  '+' - for 1 or inf repetitions.
-     * \param[in] type  Type of closure.
+     * \brief          Function for setting closure to these block.
+     * \details        '?' - for 1 or 0 repetitions;
+     *                 '*' - for 0 or inf repetitions.
+     *                 '+' - for 1 or inf repetitions.
+     * \param[in] type Type of closure.
      */
-    void add_closure(char type);
+    void add_closure(const char type);
 };
 
 #include "block.inl"

@@ -62,7 +62,8 @@ std::vector<size_t> state_machine<_alphabet_size, _character_caster>::find_end_p
 }
 
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
-void state_machine<_alphabet_size, _character_caster>::closure(size_t position, size_t state_buffer)
+void state_machine<_alphabet_size, _character_caster>::closure(
+    const size_t position, const size_t state_buffer)
 {
     if (!_active_states.at(state_buffer).count(position))
     {

@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <fstream>
 
 #include "block.hpp"
@@ -8,7 +10,7 @@
 
 constexpr size_t _alphabet_size = 40;
 
-size_t symbol_caster(char c)
+size_t symbol_caster(const char c)
 {
     if (c == ' ')
     {
@@ -16,7 +18,7 @@ size_t symbol_caster(char c)
     }
     if ('0' <= c && c <= '9')
     {
-        return static_cast<size_t>(c - '0' + 1);
+        return c - '0' + 1u;
     }
     if (c == ',')
     {
@@ -28,13 +30,13 @@ size_t symbol_caster(char c)
     }
     if ('a' <= c && c <= 'z')
     {
-        return static_cast<size_t>(c - 'a' + 11);
+        return c - 'a' + 11u;
     }
-    return static_cast<size_t>(c - 'A' + 11);
+    return c - 'A' + 11u;
 }
 
-typedef block<_alphabet_size, symbol_caster> re;
-typedef state_machine<_alphabet_size, symbol_caster> sm;
+using re = block<_alphabet_size, symbol_caster>;
+using sm = state_machine<_alphabet_size, symbol_caster>;
 
 
 // current version - fast compilation, slow execution.
@@ -43,7 +45,6 @@ int main()
     std::ifstream in("../input.txt");
 
     std::string buffer;
-
     if (in.is_open())
     {
         std::string tmp;
@@ -54,7 +55,8 @@ int main()
     }
     else
     {
-        std::cout << "no such file\n";
+        std::cout << "No input file.\n";
+        return 1;
     }
 
     re digit(re("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"), '+');
@@ -64,11 +66,9 @@ int main()
     re block(re("article ", "articles ", "arts "), re(digit_and_after_space, '+'));
     sm machine(block);
     std::cout << buffer << '\n';
-    auto tmp = machine.find_end_positions(buffer);
-    for (auto& pos : tmp)
-    {
-        std::cout << pos << ' ';
-    }
 
-  return 0;
+    const auto result = machine.find_end_positions(buffer);
+    std::copy(std::begin(result), std::end(result), std::ostream_iterator<size_t>(std::cout, " "));
+
+    return 0;
 }

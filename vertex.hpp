@@ -39,20 +39,20 @@ public:
      * \param[in] position    Id of link.
      * \param[in] destination New value for link.
      */
-    constexpr void set_link(size_t position, size_t destination);
+    constexpr void set_link(const size_t position, const size_t destination);
 
     /**
      * \brief              Getter for vertex link.
      * \param[in] position Id of link.
      * \return             Link on id position.
      */
-    constexpr size_t get_next(size_t position) const;
+    constexpr size_t get_next(const size_t position) const;
 
     /**
      * \brief                 Function for adding new link.
      * \param[in] destination New destination for eps link.
      */
-    void add_eps_link(size_t destination);
+    void add_eps_link(const size_t destination);
 
     /**
      * \brief  Getter for eps links.
