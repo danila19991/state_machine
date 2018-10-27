@@ -64,6 +64,7 @@ int main()
     re digit_and_after_space(digit, re(re(","), '?'), re(" ", "."));
 
     re block(re("article ", "articles ", "arts "), re(digit_and_after_space, '+'));
+
     sm machine(block);
     std::cout << buffer << '\n';
 
