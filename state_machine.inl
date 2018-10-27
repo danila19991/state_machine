@@ -28,10 +28,10 @@ std::vector<size_t> state_machine<_alphabet_size, _character_caster>::find_end_p
         {
             std::cout << symbol_number << '|';
         }
-        size_t next_states = _current_states ^1;
+        const size_t next_states = _current_states ^ 1;
         _active_states.at(next_states).clear();
         closure(_block.get_root(), next_states);
-        for (auto& state : _active_states.at(_current_states))
+        for (const auto& state : _active_states.at(_current_states))
         {
             if (info)
             {
@@ -41,7 +41,7 @@ std::vector<size_t> state_machine<_alphabet_size, _character_caster>::find_end_p
             {
                 result.emplace_back(symbol_number - 1);
             }
-            size_t next_vertex = _block.get_vertexes().at(state).get_next(
+            const size_t next_vertex = _block.get_vertexes().at(state).get_next(
                 _character_caster(line[symbol_number]));
             closure(next_vertex, next_states);
         }
@@ -51,7 +51,7 @@ std::vector<size_t> state_machine<_alphabet_size, _character_caster>::find_end_p
         }
         _current_states = next_states;
     }
-    for (auto& state : _active_states.at(_current_states))
+    for (const auto& state : _active_states.at(_current_states))
     {
         if (_block.get_vertexes().at(state)._is_finished)
         {
@@ -68,7 +68,7 @@ void state_machine<_alphabet_size, _character_caster>::closure(
     if (!_active_states.at(state_buffer).count(position))
     {
         _active_states.at(state_buffer).insert(position);
-        for (auto& vertex : _block.get_vertexes().at(position).get_eps_links())
+        for (const auto& vertex : _block.get_vertexes().at(position).get_eps_links())
         {
             closure(vertex, state_buffer);
         }
