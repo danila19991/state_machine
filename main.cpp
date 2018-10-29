@@ -38,11 +38,19 @@ size_t symbol_caster(const char c)
 using re = block<_alphabet_size, symbol_caster>;
 using sm = state_machine<_alphabet_size, symbol_caster>;
 
-
-// current version - fast compilation, slow execution.
-int main()
+re generate_article_searcher()
 {
-    std::ifstream in("../input.txt");
+    re digit(re("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"), '+');
+
+    re digit_and_after_space(digit, re(re(","), '?'), re(" ", "."));
+
+    return re(re("article ", "articles ", "arts "), re(digit_and_after_space, '+'));
+
+}
+
+std::string read_file(const std::string& file_name)
+{
+    std::ifstream in(file_name);
 
     std::string buffer;
     if (in.is_open())
@@ -56,20 +64,30 @@ int main()
     else
     {
         std::cout << "No input file.\n";
-        return 1;
+        return "";
     }
+    return buffer;
+}
 
-    re digit(re("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"), '+');
+// current version - fast compilation, slow execution.
+int main()
+{
+    auto buffer = read_file("../input.txt");
 
-    re digit_and_after_space(digit, re(re(","), '?'), re(" ", "."));
-
-    re block(re("article ", "articles ", "arts "), re(digit_and_after_space, '+'));
-
+    re block = generate_article_searcher();
     sm machine(block);
-    std::cout << buffer << '\n';
 
-    const auto result = machine.find_end_positions(buffer);
-    std::copy(std::begin(result), std::end(result), std::ostream_iterator<size_t>(std::cout, " "));
+    if(!buffer.empty())
+    {
+        std::cout << buffer << '\n';
 
+
+        const auto result = machine.find_end_positions(buffer);
+
+        for(const auto& elem:result)
+        {
+            std::cout << elem << ' ';
+        }
+    }
     return 0;
 }
