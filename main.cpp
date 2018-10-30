@@ -8,7 +8,7 @@
 #include "state_machine.hpp"
 
 
-constexpr size_t _alphabet_size = 40;
+constexpr size_t ALPHABET_SIZE = 40;
 
 size_t symbol_caster(const char c)
 {
@@ -35,8 +35,8 @@ size_t symbol_caster(const char c)
     return c - 'A' + 11u;
 }
 
-using re = block<_alphabet_size, symbol_caster>;
-using sm = state_machine<_alphabet_size, symbol_caster>;
+using re = block<ALPHABET_SIZE, symbol_caster>;
+using sm = state_machine<ALPHABET_SIZE, symbol_caster>;
 
 re generate_article_searcher()
 {
@@ -64,7 +64,7 @@ std::string read_file(const std::string& file_name)
     else
     {
         std::cout << "No input file.\n";
-        return "";
+        return {};
     }
     return buffer;
 }
@@ -77,16 +77,15 @@ int main()
     re block = generate_article_searcher();
     sm machine(block);
 
-    if(!buffer.empty())
+    if (!buffer.empty())
     {
         std::cout << buffer << '\n';
 
-
         const auto result = machine.find_end_positions(buffer);
 
-        for(const auto& elem:result)
+        for (const auto& elem : result)
         {
-            std::cout << elem << ' ';
+            std::cout << elem << ' ' << buffer.substr(elem.first, elem.second - elem.first) << '\n';
         }
     }
     return 0;

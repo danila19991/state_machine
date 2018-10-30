@@ -5,20 +5,21 @@
 
 #include <array>
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 #include "vertex.hpp"
 
 
 /**
  * \brief                    Class for creating configuration for state machine.
- * \tparam _alphabet_size    Size of alphabit in state machine.
- * \tparam _character_caster Function for casting symbol to size_t.
+ * \tparam ALPHABET_SIZE    Size of alphabit in state machine.
+ * \tparam CHARACTER_CASTER Function for casting symbol to size_t.
  */
-template <size_t _alphabet_size, size_t (* _character_caster)(char)>
+template <size_t ALPHABET_SIZE, size_t (*CHARACTER_CASTER)(char)>
 class block
 {
+private:
     /**
      * \brief First base for hashing.
      */
@@ -32,7 +33,7 @@ class block
     /**
      * \brief Container for vertexes in state machine.
      */
-    std::vector<vertex<_alphabet_size>> _vertexes;
+    std::vector<vertex<ALPHABET_SIZE>> _vertexes;
 
     /**
      * \brief Start position of state machine.
@@ -117,7 +118,6 @@ class block
     void add_string(const std::string& line, const Args&... args);
 
 public:
-
     /**
      * \brief           Constructor from vector of strings.
      * \param[in] lines Vector of accepting strings.
@@ -126,11 +126,11 @@ public:
 
     /**
      * \brief           Constructor from array of strings.
-     * \tparam n        Number of strings in array.
+     * \tparam N        Number of strings in array.
      * \param[in] lines Strings for adding.
      */
-    template <size_t n>
-    explicit block(const std::array<std::string, n>& lines);
+    template <size_t N>
+    explicit block(const std::array<std::string, N>& lines);
 
     /**
      * \brief           Constructor from many strings.
@@ -167,11 +167,11 @@ public:
 
     /**
      * \brief            Constructor from array of blocks.
-     * \tparam n         Size of array.
+     * \tparam N         Size of array.
      * \param[in] blocks Array of blocks, which should be concatinate.
      */
-    template <size_t n>
-    explicit block(const std::array<block, n>& blocks);
+    template <size_t N>
+    explicit block(const std::array<block, N>& blocks);
 
     /**
      * \brief           Copy constructor for making closure of block.
@@ -205,7 +205,7 @@ public:
      * \brief  Function for getting vertexes of state machine.
      * \return Vector of vertexes.
      */
-    std::vector<vertex<_alphabet_size>> get_vertexes() const;
+    std::vector<vertex<ALPHABET_SIZE>> get_vertexes() const;
 
     /**
      * \brief  Function for getting root of state machine.

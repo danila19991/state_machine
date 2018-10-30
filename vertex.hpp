@@ -8,13 +8,13 @@
 
 
 /**
- * \brief                     Vertex in state machine.
- * \tparam[in] _alphabet_size Size of alphabet for state machine.
+ * \brief                    Vertex in state machine.
+ * \tparam[in] ALPHABET_SIZE Size of alphabet for state machine.
  */
-template <size_t _alphabet_size>
+template <size_t ALPHABET_SIZE>
 class vertex
 {
-
+private:
     /**
      * \brief   Vector of eps links.
      * \details Vector because i don't know number of such links.
@@ -25,10 +25,9 @@ class vertex
      * \brief   Array of links to next states.
      * \details Default value is start state.
      */
-    std::array<size_t, _alphabet_size> _links;
+    std::array<size_t, ALPHABET_SIZE> _links;
 
 public:
-
     /**
      * \breif Default constructor.
      */
