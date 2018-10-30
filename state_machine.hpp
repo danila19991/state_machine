@@ -20,8 +20,10 @@ private:
 public:
     std::size_t operator()(const std::pair<int, int> & v) const noexcept
     {
-        return hasher((static_cast<unsigned long long>(v.first) << 32) |
-                      static_cast<unsigned long long>(v.second));
+        return hasher(
+            static_cast<unsigned long long>(v.first) << 32ull |
+            static_cast<unsigned long long>(v.second)
+        );
     }
 };
 
