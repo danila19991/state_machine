@@ -2,50 +2,51 @@
 // Created by gusef on 25.10.2018.
 //
 
-// Overloaded shift operator for printing founded patters.
 template <typename T>
-std::ostream& operator<<(std::ostream& out, const std::pair<T, T>& elem)
+std::ostream& operator << (std::ostream& out, const std::pair<T,T>& elem)
 {
-    out << '[' << elem.first << ',' << elem.second << ']';
+    out<<'['<<elem.first<<','<<elem.second<<']';
     return out;
 }
 
-template <size_t ALPHABET_SIZE, size_t (*CHARACTER_CASTER)(char)>
-state_machine<ALPHABET_SIZE, CHARACTER_CASTER>::state_machine(
-    block<ALPHABET_SIZE, CHARACTER_CASTER>& block)
-: _block(block)
-, _current_states(0)
+template <size_t _alphabet_size, size_t (* _character_caster)(char)>
+state_machine_slow<_alphabet_size, _character_caster>::state_machine_slow(
+    _re_component<_alphabet_size, _character_caster>& block)
+: _block(block),
+  _current_length(0),
+  _current_states(0)
 {
 }
 
-template <size_t ALPHABET_SIZE, size_t (*CHARACTER_CASTER)(char)>
-std::vector<std::pair<size_t,size_t>> state_machine<ALPHABET_SIZE, CHARACTER_CASTER>::find_end_positions(
-    const std::string& line, const bool info)
+template <size_t _alphabet_size, size_t (* _character_caster)(char)>
+std::vector<std::pair<size_t,size_t>> state_machine_slow<_alphabet_size, _character_caster>::find_end_positions(
+    const std::string& line,const bool info)
 {
     _current_length = 0;
     clear_states(_current_states, _current_length);
     return append_search(line, info);
 }
 
-template <size_t ALPHABET_SIZE, size_t (* CHARACTER_CASTER)(char)>
-void state_machine<ALPHABET_SIZE, CHARACTER_CASTER>::closure(
+template <size_t _alphabet_size, size_t (* _character_caster)(char)>
+void state_machine_slow<_alphabet_size, _character_caster>::closure(
     const size_t position, const size_t state_buffer, const size_t start_pos)
 {
-    if (position != _block.get_root())
+    if(position != _block.get_root())
     {
         closure_impl(position, state_buffer, start_pos);
     }
 }
 
-template<size_t ALPHABET_SIZE, size_t (*CHARACTER_CASTER)(char)>
-void state_machine<ALPHABET_SIZE, CHARACTER_CASTER>::clear_states(const size_t id, const size_t position)
+template<size_t _alphabet_size, size_t (*_character_caster)(char)>
+void state_machine_slow<_alphabet_size, _character_caster>::clear_states(const size_t id, const size_t position)
 {
     _active_states.at(id).clear();
     closure_impl(_block.get_root(), id, position);
 }
 
-template<size_t ALPHABET_SIZE, size_t (*CHARACTER_CASTER)(char)>
-std::vector<std::pair<size_t,size_t>> state_machine<ALPHABET_SIZE, CHARACTER_CASTER>::append_search(
+template<size_t _alphabet_size, size_t (*_character_caster)(char)>
+std::vector<std::pair<size_t,size_t>>
+state_machine_slow<_alphabet_size, _character_caster>::append_search(
     const std::string& line, const bool info)
 {
     if (line.empty())
@@ -59,8 +60,8 @@ std::vector<std::pair<size_t,size_t>> state_machine<ALPHABET_SIZE, CHARACTER_CAS
         clear_states(next_states, _current_length+1);
         for(const auto& state : _active_states.at(_current_states))
         {
-            const size_t next_vertex = _block.get_vertexes().at(state.first).get_next(
-                CHARACTER_CASTER(line[symbol_number])
+            const size_t next_vertex = _block.get_vertexes().at(state.first).get_link(
+                _character_caster(line[symbol_number])
             );
             closure(next_vertex, next_states, state.second);
         }
@@ -92,8 +93,8 @@ std::vector<std::pair<size_t,size_t>> state_machine<ALPHABET_SIZE, CHARACTER_CAS
     return result;
 }
 
-template<size_t ALPHABET_SIZE, size_t (*CHARACTER_CASTER)(char)>
-void state_machine<ALPHABET_SIZE, CHARACTER_CASTER>::closure_impl(
+template<size_t _alphabet_size, size_t (*_character_caster)(char)>
+void state_machine_slow<_alphabet_size, _character_caster>::closure_impl(
     const size_t position, const size_t state_buffer, const size_t start_pos)
 {
     if (!_active_states.at(state_buffer).count(std::make_pair(position,start_pos)))

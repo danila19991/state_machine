@@ -8,13 +8,13 @@
 
 
 /**
- * \brief                    Vertex in state machine.
- * \tparam[in] ALPHABET_SIZE Size of alphabet for state machine.
+ * \brief                     Vertex in state machine with eps-links.
+ * \tparam[in] _alphabet_size Size of alphabet for state machine.
  */
-template <size_t ALPHABET_SIZE>
-class vertex
+template <size_t _alphabet_size>
+class _vertex_with_e
 {
-private:
+
     /**
      * \brief   Vector of eps links.
      * \details Vector because i don't know number of such links.
@@ -25,13 +25,14 @@ private:
      * \brief   Array of links to next states.
      * \details Default value is start state.
      */
-    std::array<size_t, ALPHABET_SIZE> _links;
+    std::array<size_t, _alphabet_size> _links;
 
 public:
+
     /**
      * \breif Default constructor.
      */
-    vertex();
+    _vertex_with_e();
 
     /**
      * \brief                 Setter for vertex link.
@@ -45,7 +46,7 @@ public:
      * \param[in] position Id of link.
      * \return             Link on id position.
      */
-    constexpr size_t get_next(const size_t position) const;
+    constexpr size_t get_link(const size_t position) const;
 
     /**
      * \brief                 Function for adding new link.
@@ -65,4 +66,4 @@ public:
     bool _is_finished;
 };
 
-#include "vertex.inl"
+#include "_vertex_with_e.inl"

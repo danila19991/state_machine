@@ -1,4 +1,4 @@
-# state_machine
+# state_machine_slow
 
 State machine implementation on C++.
 

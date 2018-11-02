@@ -3,12 +3,13 @@
 #include <iterator>
 #include <fstream>
 
-#include "block.hpp"
-#include "vertex.hpp"
-#include "state_machine.hpp"
+#include "re_compnent/_re_component.hpp"
+#include "vertexes/_vertex_with_e.hpp"
+#include "state_machine/state_machine_slow.hpp"
+#include "state_machine/state_machine_fast.hpp"
 
 
-constexpr size_t ALPHABET_SIZE = 40;
+constexpr size_t _alphabet_size = 40;
 
 size_t symbol_caster(const char c)
 {
@@ -35,8 +36,10 @@ size_t symbol_caster(const char c)
     return c - 'A' + 11u;
 }
 
-using re = block<ALPHABET_SIZE, symbol_caster>;
-using sm = state_machine<ALPHABET_SIZE, symbol_caster>;
+using re = _re_component<_alphabet_size, symbol_caster>;
+using sm = state_machine_slow<_alphabet_size, symbol_caster>;
+using smf = state_machine_fast<_alphabet_size, symbol_caster>;
+using sms = state_machine_suf<_alphabet_size, symbol_caster>;
 
 re generate_article_searcher()
 {
@@ -64,7 +67,7 @@ std::string read_file(const std::string& file_name)
     else
     {
         std::cout << "No input file.\n";
-        return {};
+        return "";
     }
     return buffer;
 }
@@ -72,21 +75,48 @@ std::string read_file(const std::string& file_name)
 // current version - fast compilation, slow execution.
 int main()
 {
+    /*
+    setlocale(LC_ALL, "rus");
     auto buffer = read_file("../input.txt");
 
-    re block = generate_article_searcher();
-    sm machine(block);
+    re _re_component = generate_article_searcher();
 
-    if (!buffer.empty())
+    sm machine(_re_component);
+
+    if(!buffer.empty())
     {
         std::cout << buffer << '\n';
 
+
         const auto result = machine.find_end_positions(buffer);
 
-        for (const auto& elem : result)
+        for(const auto& elem:result)
         {
-            std::cout << elem << ' ' << buffer.substr(elem.first, elem.second - elem.first) << '\n';
+            std::cout << elem << ' ';
         }
     }
+     */
+
+    re block(re("abad", "ad", "ab"),'+');
+    re rblock(re("da", "ba", "daba"), '+');
+
+//    block = re(re(re(re("a"),'*'),re(re("a"),'*')), '+');
+
+    smf machine(block, rblock);
+
+    std::cout<<block.size()<<' '<<machine.size()<<'\n';
+
+    machine.print();
+
+    auto result = machine.find_end_positions("adabcad");
+
+    for(const auto& elem:result)
+    {
+        std::cout << elem << ' ';
+    }
+
+
     return 0;
 }
+
+// ababababa

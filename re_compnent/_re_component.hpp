@@ -5,21 +5,20 @@
 
 #include <array>
 #include <string>
-#include <unordered_map>
 #include <vector>
+#include <unordered_map>
 
-#include "vertex.hpp"
+#include "../vertexes/_vertex_with_e.hpp"
 
 
 /**
  * \brief                    Class for creating configuration for state machine.
- * \tparam ALPHABET_SIZE    Size of alphabit in state machine.
- * \tparam CHARACTER_CASTER Function for casting symbol to size_t.
+ * \tparam _alphabet_size    Size of alphabit in state machine.
+ * \tparam _character_caster Function for casting symbol to size_t.
  */
-template <size_t ALPHABET_SIZE, size_t (*CHARACTER_CASTER)(char)>
-class block
+template <size_t _alphabet_size, size_t (* _character_caster)(char)>
+class _re_component
 {
-private:
     /**
      * \brief First base for hashing.
      */
@@ -33,7 +32,7 @@ private:
     /**
      * \brief Container for vertexes in state machine.
      */
-    std::vector<vertex<ALPHABET_SIZE>> _vertexes;
+    std::vector<_vertex_with_e<_alphabet_size>> _vertexes;
 
     /**
      * \brief Start position of state machine.
@@ -90,7 +89,7 @@ private:
      * \brief           Function for concatenating 2 blocks.
      * \param[in] block New block for concatenating.
      */
-    void concatenate_impl(const block& block);
+    void concatenate_impl(const _re_component& block);
 
     /**
      * \brief Function for concatenate many blocks.
@@ -118,19 +117,20 @@ private:
     void add_string(const std::string& line, const Args&... args);
 
 public:
+
     /**
      * \brief           Constructor from vector of strings.
      * \param[in] lines Vector of accepting strings.
      */
-    explicit block(const std::vector<std::string>& lines);
+    explicit _re_component(const std::vector<std::string>& lines);
 
     /**
      * \brief           Constructor from array of strings.
-     * \tparam N        Number of strings in array.
+     * \tparam n        Number of strings in array.
      * \param[in] lines Strings for adding.
      */
-    template <size_t N>
-    explicit block(const std::array<std::string, N>& lines);
+    template <size_t n>
+    explicit _re_component(const std::array<std::string, n>& lines);
 
     /**
      * \brief           Constructor from many strings.
@@ -139,7 +139,7 @@ public:
      * \param[in] args  Other strings.
      */
     template <typename... Args>
-    explicit block(const std::string& line1, const Args&... args);
+    explicit _re_component(const std::string& line1, const Args&... args);
 
     /**
      * \brief           Copy constructor from many blocks.
@@ -148,7 +148,7 @@ public:
      * \param[in] args  Other blocks.
      */
     template <typename... Args>
-    explicit block(const block& other, const Args&... args);
+    explicit _re_component(const _re_component& other, const Args&... args);
 
     /**
      * \brief           Move constructor from many blocks.
@@ -157,35 +157,35 @@ public:
      * \param[in] args  Other blocks.
      */
     template <typename... Args>
-    explicit block(block&& other, Args&&... args) noexcept;
+    explicit _re_component(_re_component&& other, Args&&... args) noexcept;
 
     /**
      * \brief            Constructor from vector of blocks.
      * \param[in] blocks Vector of blocks, which should be concatinate.
      */
-    explicit block(const std::vector<block>& blocks);
+    explicit _re_component(const std::vector<_re_component>& blocks);
 
     /**
      * \brief            Constructor from array of blocks.
-     * \tparam N         Size of array.
+     * \tparam n         Size of array.
      * \param[in] blocks Array of blocks, which should be concatinate.
      */
-    template <size_t N>
-    explicit block(const std::array<block, N>& blocks);
+    template <size_t n>
+    explicit _re_component(const std::array<_re_component, n>& blocks);
 
     /**
      * \brief           Copy constructor for making closure of block.
      * \param[in] other Block from which should be constructed.
      * \param[in] type  Type of closure.
      */
-    block(const block& other, const char type);
+    _re_component(const _re_component& other, const char type);
 
     /**
      * \brief           Move constructor for making closure of block.
      * \param[in] other Block from which should be constructed.
      * \param[in] type  Type of closure.
      */
-    block(block&& other, const char type) noexcept;
+    _re_component(_re_component&& other, const char type) noexcept;
 
     /**
      * \brief Function for printing structure of state machine.
@@ -199,13 +199,13 @@ public:
      * \param[in] args  Other blocks.
      */
     template <typename... Args>
-    void concatenate(const block& other, const Args&... args);
+    void concatenate(const _re_component& other, const Args&... args);
 
     /**
      * \brief  Function for getting vertexes of state machine.
      * \return Vector of vertexes.
      */
-    std::vector<vertex<ALPHABET_SIZE>> get_vertexes() const;
+    std::vector<_vertex_with_e<_alphabet_size>> get_vertexes() const;
 
     /**
      * \brief  Function for getting root of state machine.
@@ -229,4 +229,4 @@ public:
     void add_closure(const char type);
 };
 
-#include "block.inl"
+#include "_re_component.inl"
