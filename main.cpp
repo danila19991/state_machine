@@ -5,8 +5,8 @@
 
 #include "re_compnent/_re_component.hpp"
 #include "vertexes/_vertex_with_e.hpp"
-#include "state_machine/state_machine_slow.hpp"
-#include "state_machine/state_machine_fast.hpp"
+#include "state_machine/memory_optimisation/state_machine_slow.hpp"
+#include "state_machine/time_optimisation/state_machine_fast.hpp"
 
 
 constexpr size_t _alphabet_size = 40;

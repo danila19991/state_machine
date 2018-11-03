@@ -7,7 +7,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "../re_compnent/_re_component.hpp"
+#include "../../re_compnent/_re_component.hpp"
 
 class pair_hash {
     std::hash<unsigned long long> hasher;

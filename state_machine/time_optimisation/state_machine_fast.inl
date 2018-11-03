@@ -1,21 +1,6 @@
 #include <queue>
 #include <deque>
 
-/*
-class set_hash {
-    std::hash<unsigned long long> hasher;
-public:
-    inline std::size_t operator()(const std::set<size_t> & v) const {
-        std::size_t res = 0;
-        for(const auto& it:v)
-        {
-            auto loc_hash = hasher(it);
-            res = res*1373 + ((loc_hash<<7)^(loc_hash>>7));
-        }
-        return res;
-    }
-};
-//*/
 
 template<size_t _alphabet_size, size_t (*_character_caster)(char)>
 state_machine_fast<_alphabet_size, _character_caster>::state_machine_fast(
@@ -80,6 +65,10 @@ state_machine_fast<_alphabet_size, _character_caster>::state_machine_fast(
 template<size_t _alphabet_size, size_t (*_character_caster)(char)>
 void state_machine_fast<_alphabet_size, _character_caster>::print()
 {
+    _start_taker.print();
+
+    std::cout<<'\n';
+
     for(size_t id=0;id<_vertexes.size();++id){
         std::cout<<id<<'|'<<_vertexes.at(id)._is_finished<<'|';
         for(size_t char_index = 0; char_index < _alphabet_size; ++char_index)
