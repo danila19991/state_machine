@@ -14,6 +14,7 @@
 template <size_t _alphabet_size>
 class _vertex
 {
+protected:
     /**
      * \brief   Array of links to next states.
      * \details Default value is start state.

@@ -201,6 +201,11 @@ template<size_t _alphabet_size, size_t (*_character_caster)(char)>
 std::set<size_t> state_machine_fast<_alphabet_size, _character_caster>::closure(
     const _re_component<_alphabet_size, _character_caster>& block, size_t id)
 {
+    if(id == 0)
+    {
+        return {};
+    }
+
     std::set<size_t> res;
     std::queue<size_t> q;
     q.push(id);
@@ -215,7 +220,10 @@ std::set<size_t> state_machine_fast<_alphabet_size, _character_caster>::closure(
             res.insert(v);
             for(const auto& new_vertex:block.get_vertexes().at(v).get_eps_links())
             {
-                q.push(new_vertex);
+                if(new_vertex)
+                {
+                    q.push(new_vertex);
+                }
             }
         }
     }

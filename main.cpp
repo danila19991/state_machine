@@ -19,7 +19,7 @@ size_t symbol_caster(const char c)
     }
     if ('0' <= c && c <= '9')
     {
-        return c - '0' + 1u;
+        return c - '0' + 28u;
     }
     if (c == ',')
     {
@@ -31,9 +31,9 @@ size_t symbol_caster(const char c)
     }
     if ('a' <= c && c <= 'z')
     {
-        return c - 'a' + 11u;
+        return c - 'a' + 1u;
     }
-    return c - 'A' + 11u;
+    return c - 'A' + 1u;
 }
 
 using re = _re_component<_alphabet_size, symbol_caster>;
@@ -97,8 +97,8 @@ int main()
     }
      */
 
-    re block(re("abad", "ad", "ab"),'+');
-    re rblock(re("da", "ba", "daba"), '+');
+    re block(re("a", "b"), '+');
+    re rblock(re("a", "b"), '+');
 
 //    block = re(re(re(re("a"),'*'),re(re("a"),'*')), '+');
 
@@ -108,7 +108,7 @@ int main()
 
     machine.print();
 
-    auto result = machine.find_end_positions("adabcad");
+    auto result = machine.find_end_positions("abacaba");
 
     for(const auto& elem:result)
     {

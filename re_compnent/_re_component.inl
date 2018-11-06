@@ -8,7 +8,8 @@
 
 
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
-_re_component<_alphabet_size, _character_caster>::_re_component(const std::vector<std::string>& lines)
+_re_component<_alphabet_size, _character_caster>::_re_component(const std::vector<std::string>& lines):
+    _vertexes(1)
 {
     _root = new_vertex();
     _finish_vertex = new_vertex();
@@ -22,7 +23,8 @@ _re_component<_alphabet_size, _character_caster>::_re_component(const std::vecto
 
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
 template <size_t n>
-_re_component<_alphabet_size, _character_caster>::_re_component(const std::array<std::string, n>& lines)
+_re_component<_alphabet_size, _character_caster>::_re_component(const std::array<std::string, n>& lines):
+    _vertexes(1)
 {
     _root = new_vertex();
     _finish_vertex = new_vertex();
@@ -36,7 +38,8 @@ _re_component<_alphabet_size, _character_caster>::_re_component(const std::array
 
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
 _re_component<_alphabet_size, _character_caster>::_re_component(
-    const std::vector<_re_component<_alphabet_size, _character_caster>>& blocks)
+    const std::vector<_re_component<_alphabet_size, _character_caster>>& blocks):
+    _vertexes(1)
 {
     if (!blocks.empty())
     {
@@ -54,7 +57,8 @@ _re_component<_alphabet_size, _character_caster>::_re_component(
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
 template <size_t n>
 _re_component<_alphabet_size, _character_caster>::_re_component(
-    const std::array<_re_component<_alphabet_size, _character_caster>, n>& blocks)
+    const std::array<_re_component<_alphabet_size, _character_caster>, n>& blocks):
+    _vertexes(1)
 {
     if (!blocks.empty())
     {
@@ -71,7 +75,8 @@ _re_component<_alphabet_size, _character_caster>::_re_component(
 
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
 template <typename... Args>
-_re_component<_alphabet_size, _character_caster>::_re_component(const std::string& line1, const Args&... args)
+_re_component<_alphabet_size, _character_caster>::_re_component(const std::string& line1, const Args&... args):
+    _vertexes(1)
 {
     _root = new_vertex();
     _finish_vertex = new_vertex();
@@ -127,14 +132,15 @@ size_t _re_component<_alphabet_size, _character_caster>::new_vertex()
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
 void _re_component<_alphabet_size, _character_caster>::optimise_vertexes()
 {
-    std::vector<_vertex_with_e<_alphabet_size>> new_vertexes(1);
+    std::vector<_vertex_with_e<_alphabet_size>> new_vertexes(2);
 
     std::deque<bool> was_in_vertex(_vertexes.size(), false);
     was_in_vertex.at(_root) = true;
+    was_in_vertex.at(0) = true;
 
-    const size_t root = 0;
+    const size_t root = 1;
 
-    std::unordered_map<size_t, size_t> vertexes_dict{{_root, root}};
+    std::unordered_map<size_t, size_t> vertexes_dict{{0, 0}, {_root, root}};
 
     std::deque<size_t> q_vertexes{_root}; // use deque as queue.
     while (!q_vertexes.empty())
@@ -156,6 +162,7 @@ void _re_component<_alphabet_size, _character_caster>::optimise_vertexes()
             new_vertexes.at(new_vertex).set_link(i, vertexes_dict[current_vertexes.get_link(i)]);
         }
 
+        // move to range-base for
         const auto eps_links = current_vertexes.get_eps_links();
         for (size_t link_number = 0; link_number < eps_links.size(); ++link_number)
         {
@@ -182,7 +189,9 @@ bool _re_component<_alphabet_size, _character_caster>::is_equal_sub_trees(const 
 {
     if (vertex1 == vertex2) return true;
 
-    if ((vertex1 == _root && vertex2 != _root) || (vertex1 != _root && vertex2 == _root))
+    // check if need to check vertexes with root
+    if ((vertex1 == _root && vertex2 != _root) || (vertex1 != _root && vertex2 == _root) ||
+        (vertex1 == 0 && vertex2 != 0) || (vertex1 != 0 && vertex2 == 0))
         return false;
 
     auto eps_links1 = _vertexes.at(vertex1).get_eps_links();
@@ -220,7 +229,8 @@ unsigned long long _re_component<_alphabet_size, _character_caster>::optimise_li
     unsigned long long current_hash = 1;
     for (size_t alphabet_index = 0; alphabet_index < _alphabet_size; ++alphabet_index)
     {
-        if (_vertexes.at(position).get_link(alphabet_index) != _root)
+        if (_vertexes.at(position).get_link(alphabet_index) != _root &&
+            _vertexes.at(position).get_link(alphabet_index) != 0)
         {
             const auto sub_tree_hash = optimise_links_crawler(
                 _vertexes.at(position).get_link(alphabet_index)
@@ -244,6 +254,7 @@ unsigned long long _re_component<_alphabet_size, _character_caster>::optimise_li
                 );
             }
 
+            // may be change to other type of hashing
             current_hash += BASE1 * alphabet_index + BASE2 * sub_tree_hash;
         }
     }
@@ -260,6 +271,7 @@ void _re_component<_alphabet_size, _character_caster>::optimise()
 template <size_t _alphabet_size, size_t (* _character_caster)(char)>
 void _re_component<_alphabet_size, _character_caster>::print() const
 {
+    std::cout << "root: " << _root << " finish state: " << _finish_vertex << '\n';
     for (size_t vertex = 0; vertex < _vertexes.size(); ++vertex)
     {
         std::cout << vertex << '|' << _vertexes.at(vertex)._is_finished << '|';
@@ -302,7 +314,7 @@ void _re_component<_alphabet_size, _character_caster>::concatenate_impl(const _r
     std::deque<bool> was_in_vertex(block.size(), false);
     was_in_vertex.at(block.get_root()) = true;
 
-    std::unordered_map<size_t, size_t> vertexes_dict{{block.get_root(), _root}};
+    std::unordered_map<size_t, size_t> vertexes_dict{{0, 0}, {block.get_root(), _root}};
     _vertexes.at(_finish_vertex)._is_finished = false;
 
     std::deque<size_t> q_vertexes{block.get_root()}; // use deque as queue.

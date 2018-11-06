@@ -28,7 +28,6 @@ state_machine_suf<_alphabet_size, _character_caster>::state_machine_suf(
         for(size_t char_index=0; char_index<_alphabet_size; ++char_index)
         {
             std::set<size_t> new_vertexes;
-            new_vertexes.insert(block.get_root());
 
             for(const auto& it: v_closure)
             {
@@ -59,12 +58,14 @@ state_machine_suf<_alphabet_size, _character_caster>::state_machine_suf(
         }
 
     }
+
     optimise();
 }
 
 template<size_t _alphabet_size, size_t (*_character_caster)(char)>
 void state_machine_suf<_alphabet_size, _character_caster>::print()
 {
+    std::cout<<"root: "<<_root<<" end:"<<_stop_vertex<<'\n';
     for(size_t id=0;id<_vertexes.size();++id){
         std::cout<<id<<'|'<<_vertexes.at(id)._is_finished<<'|';
         for(size_t char_index = 0; char_index < _alphabet_size; ++char_index)
@@ -204,6 +205,12 @@ template<size_t _alphabet_size, size_t (*_character_caster)(char)>
 std::set<size_t> state_machine_suf<_alphabet_size, _character_caster>::closure(
     const _re_component<_alphabet_size, _character_caster>& block, size_t id)
 {
+    if(id == 0)
+    {
+        return {};
+    }
+
+    // optimise it more memory less queue
     std::set<size_t> res;
     std::queue<size_t> q;
     q.push(id);
@@ -218,7 +225,10 @@ std::set<size_t> state_machine_suf<_alphabet_size, _character_caster>::closure(
             res.insert(v);
             for(const auto& new_vertex:block.get_vertexes().at(v).get_eps_links())
             {
-                q.push(new_vertex);
+                if(new_vertex)
+                {
+                    q.push(new_vertex);
+                }
             }
         }
     }
