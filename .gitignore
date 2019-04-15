@@ -270,3 +270,5 @@ __pycache__/
 [Dd]ependencies/
 [Bb]uild/
 .vscode/
+
+cmake-build-debug/*
