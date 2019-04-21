@@ -14,7 +14,7 @@ Short description of what you want.
 
 ## Possible solution
 
-Short description about solution? you want to see.
+Short description about solution, you want to see.
 <!-- For example: Change encoding used for working. -->
 
 ## Additional context or links to related issues
