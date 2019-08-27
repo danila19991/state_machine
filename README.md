@@ -1,6 +1,6 @@
 # state_machine
 
-State machine implementation on C++.
+State machine implementation on C++. These idea of this project was get from [here](https://stackoverflow.com/questions/844183/regular-expression-implementation-details)
 
 ## Compiling
 
